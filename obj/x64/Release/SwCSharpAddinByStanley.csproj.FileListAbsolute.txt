@@ -1,0 +1,7 @@
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\x64\Release\SwCSharpAddinByStanley.dll.config
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\x64\Release\SwCSharpAddinByStanley.dll
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\x64\Release\SwCSharpAddinByStanley.tlb
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\x64\Release\SolidWorksTools.dll
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\x64\Release\SwCSharpAddinByStanley.Form1.resources
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\x64\Release\SwCSharpAddinByStanley.csproj.GenerateResource.Cache
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\x64\Release\SwCSharpAddinByStanley.dll

@@ -1,0 +1,13 @@
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.dll
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.pdb
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.tlb
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SolidWorksTools.dll
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csprojResolveAssemblyReference.cache
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.dll
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.pdb
+F:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csprojResolveAssemblyReference.cache
+F:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.dll
+F:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.pdb
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.dll.config
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.Form1.resources
+E:\我的坚果云\private\Program\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csproj.GenerateResource.Cache
