@@ -288,8 +288,8 @@ namespace SwCSharpAddinByStanley
 
                     CommandTabBox cmdBox = cmdTab.AddCommandTabBox();
 
-                    int[] cmdIDs = new int[3];
-                    int[] TextType = new int[3];
+                    int[] cmdIDs = new int[7];
+                    int[] TextType = new int[7];
 
                     cmdIDs[0] = cmdGroup.get_CommandID(cmdIndex0);
 
@@ -298,10 +298,25 @@ namespace SwCSharpAddinByStanley
                     cmdIDs[1] = cmdGroup.get_CommandID(cmdIndex1);
 
                     TextType[1] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[2] = cmdGroup.get_CommandID(cmdIndex2);
 
-                    cmdIDs[2] = cmdGroup.ToolbarId;
+                    TextType[2] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[3] = cmdGroup.get_CommandID(cmdIndex3);
+                    
+                    TextType[3] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[4] = cmdGroup.get_CommandID(cmdIndex4);
 
-                    TextType[2] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal | (int)swCommandTabButtonFlyoutStyle_e.swCommandTabButton_ActionFlyout;
+                    TextType[4] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[5] = cmdGroup.get_CommandID(cmdIndex5);
+
+                    TextType[5] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[6] = cmdGroup.get_CommandID(cmdIndex6);
+
+                    TextType[6] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    
+                    //cmdIDs[2] = cmdGroup.ToolbarId;
+
+                    //TextType[2] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal | (int)swCommandTabButtonFlyoutStyle_e.swCommandTabButton_ActionFlyout;
 
                     bResult = cmdBox.AddCommands(cmdIDs, TextType);
 
@@ -485,9 +500,9 @@ namespace SwCSharpAddinByStanley
                 {
                     try
                     {
-                        component = selectionMgr.GetSelectedObject6(looptime, -1);
-                        partDoc = (PartDoc)component.GetModelDoc2();
                         looptime--;
+                        component = selectionMgr.GetSelectedObject6(looptime, -1);
+                        partDoc = (PartDoc)component.GetModelDoc2();                        
                         //todo：校核是否是零件类,现在是直接抛出
                         materialPropertyValues = partDoc.MaterialPropertyValues;
                         partDoc.MaterialPropertyValues = RandomColorValues(materialPropertyValues);
@@ -516,6 +531,7 @@ namespace SwCSharpAddinByStanley
 
         public void HoleCheck()
         {
+            MessageBox.Show("此功能计划中...");
             IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
             //获取当前打开文件类型：1-part，2-assembly
             int modleType = modDoc.GetType();

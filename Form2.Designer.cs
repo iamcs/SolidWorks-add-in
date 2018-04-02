@@ -42,7 +42,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(260, 80);
             this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "欢迎和我联系\n我的邮箱：iamcs@126.com\n我的GitHub地址：https://github.com/iamcs\n接受资助（大于1元）";
+            this.richTextBox1.Text = "欢迎和我联系\n我的邮箱：iamcs@126.com\n我的GitHub地址：https://github.com/iamcs\n资助我，（≤500）：";
             // 
             // pictureBox1
             // 
