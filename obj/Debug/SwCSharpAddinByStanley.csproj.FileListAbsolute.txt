@@ -22,3 +22,4 @@ F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\S
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csproj.GenerateResource.Cache
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.dll
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.pdb
+F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csprojResolveAssemblyReference.cache

@@ -241,15 +241,15 @@ namespace SwCSharpAddinByStanley
             cmdGroup.SmallMainIcon = iBmp.CreateFileFromResourceBitmap("SwCSharpAddinByStanley.MainIconSmall.bmp", thisAssembly);
 
             int menuToolbarOption = (int)(swCommandItemType_e.swMenuItem | swCommandItemType_e.swToolbarItem);
-            cmdIndex0 = cmdGroup.AddCommandItem2("清空属性", -1, "清空此零件的属性", "清空此零件的属性", 0, "PropertyClear", "", mainItemID1, menuToolbarOption);
+            cmdIndex0 = cmdGroup.AddCommandItem2("清空属性", -1, "清空属性", "清空属性", 0, "PropertyClear", "", mainItemID1, menuToolbarOption);
             //cmdIndex0 = cmdGroup.AddCommandItem2("CreateCube", -1, "Create a cube", "Create cube", 0, "CreateCube", "", mainItemID1, menuToolbarOption);
             //cmdIndex1 = cmdGroup.AddCommandItem2("Show PMP", -1, "Display sample property manager", "Show PMP", 2, "ShowPMP", "EnablePMP", mainItemID2, menuToolbarOption);
-            cmdIndex1 = cmdGroup.AddCommandItem2("填写图号", -1, "从文件名抽取图号", "从文件名抽取图号", 2, "DrawingNoInput", "", mainItemID2, menuToolbarOption);
+            cmdIndex1 = cmdGroup.AddCommandItem2("填写图号", -1, "填写图号", "填写图号", 1, "DrawingNoInput", "", mainItemID2, menuToolbarOption);
             cmdIndex2 = cmdGroup.AddCommandItem2("配置插件", -1, "配置插件", "配置插件", 2, "ConfigModify", "", mainItemID3, menuToolbarOption);
-            cmdIndex3 = cmdGroup.AddCommandItem2("随机颜色", -1, "随机颜色", "随机颜色", 2, "PartDye", "", mainItemID4, menuToolbarOption);
-            cmdIndex4 = cmdGroup.AddCommandItem2("检查配孔", -1, "检查配孔", "检查配孔", 2, "HoleCheck", "", mainItemID5, menuToolbarOption);
-            cmdIndex5 = cmdGroup.AddCommandItem2("外包尺寸", -1, "获取最小外包尺寸", "获取最小外包尺寸", 2, "GetBoundingBox", "", mainItemID6, menuToolbarOption);
-            cmdIndex6 = cmdGroup.AddCommandItem2("关于我", -1, "author", "author", 2, "AboutMe", "", mainItemID7, menuToolbarOption);
+            cmdIndex3 = cmdGroup.AddCommandItem2("随机颜色", -1, "随机颜色", "随机颜色", 3, "PartDye", "", mainItemID4, menuToolbarOption);
+            cmdIndex4 = cmdGroup.AddCommandItem2("检查配孔", -1, "检查配孔", "检查配孔", 4, "HoleCheck", "", mainItemID5, menuToolbarOption);
+            cmdIndex5 = cmdGroup.AddCommandItem2("外包尺寸", -1, "外包尺寸", "外包尺寸", 5, "GetBoundingBox", "", mainItemID6, menuToolbarOption);
+            cmdIndex6 = cmdGroup.AddCommandItem2("关于我", -1, "关于我", "关于我", 6, "AboutMe", "", mainItemID7, menuToolbarOption);
 
             cmdGroup.HasToolbar = true;
             cmdGroup.HasMenu = true;
@@ -570,7 +570,7 @@ namespace SwCSharpAddinByStanley
 
         public void HoleCheck()
         {
-            MessageBox.Show("此功能计划中...");
+            //MessageBox.Show("此功能计划中...");
             IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
             //获取当前打开文件类型：1-part，2-assembly
             int modleType = modDoc.GetType();
@@ -580,16 +580,56 @@ namespace SwCSharpAddinByStanley
             Component2 component;
             WizardHoleFeatureData2 holeFeatureData;
             Feature feature;
+            
             int featureCount;
             ModelDocExtension modDocExtension;
+            object[] arrBody = null;
+            Body2 swBody = default(Body2);
+            Face2[] arrface;
+            Edge[] edges;
 
+
+            
             partDoc = (PartDoc)modDoc;
-            featureCount = modDoc.GetFeatureCount();            
+            feature = partDoc.FirstFeature();
+            while(feature != null)
+            {
+                if(feature.GetTypeName() == "HoleWzd")
+                {
+                    holeFeatureData = feature.GetDefinition();
+                    foreach(SketchPoint x in holeFeatureData.GetSketchPoints())
+                    {
+                        MessageBox.Show("发现孔坐标\nx: "+(x.X*1000).ToString()+"\n"+
+                                        "y: " + (x.Y * 1000).ToString() + "\n" +
+                                        "z: " + (x.Z * 1000).ToString() + "\n");
+                    }
+                };
+                feature= feature.GetNextFeature();
+            }
+            /*WizardHoleFeatureData2 holes;
+            modDoc.feature
+            partDoc.FeatureById
+            arrBody = (Body2[])partDoc.GetBodies2((int)swBodyType_e.swSolidBody, true);
+            foreach (Body2 x in arrBody)
+            {
+                arrface = (Face2[])x.GetFaces();
+                foreach (Face2 y in arrface)
+                {
+                    y.is
+                    edges = (Edge[])y.GetEdges();
+                    foreach (Edge z in edges)
+                    { 
+                      
+                    }
+                }
+            }
+            partDoc.GetNamedEntities();
+            featureCount = modDoc.GetFeatureCount();
             while(featureCount>=0)
             {
                 featureCount--;                
                 //feature = partDoc.;
-            }
+            }*/
         }
 
         public void GetBoundingBox()
@@ -650,11 +690,11 @@ namespace SwCSharpAddinByStanley
 
         public void FlyoutCallback()
         {
-            /*FlyoutGroup flyGroup = iCmdMgr.GetFlyoutGroup(flyoutGroupID);
+            FlyoutGroup flyGroup = iCmdMgr.GetFlyoutGroup(flyoutGroupID);
             flyGroup.RemoveAllCommandItems();
 
             flyGroup.AddCommandItem(System.DateTime.Now.ToLongTimeString(), "test", 0, "FlyoutCommandItem1", "FlyoutEnableCommandItem1");
-            */
+            
         }
         public int FlyoutEnable()
         {
