@@ -16,7 +16,6 @@ F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\S
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.pdb
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SwCSharpAddinByStanley.tlb
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\bin\Debug\SolidWorksTools.dll
-F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.csprojResolveAssemblyReference.cache
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.Form1.resources
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.AboutMe.resources
 F:\chenshi\private_file\programing\visual studio 2010\Projects\SolidworksAddin\SwCSharpAddinByStanley\SwCSharpAddinByStanley\obj\Debug\SwCSharpAddinByStanley.Resource1.resources

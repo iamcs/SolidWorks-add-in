@@ -444,29 +444,68 @@ namespace SwCSharpAddinByStanley
 
         public void DrawingNoInput()
         {
-            IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
+            IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;                       
+            
+            //获取当前打开文件类型：1-part，2-assembly
+            int modleType = modDoc.GetType();
+            //将本体命名
+            GetAndSetDrawingNo(modDoc);//待完善
+
+            //装配体则对下层命名
+            if (modleType == 2)
+            {
+                AssemblyDoc asmDoc = (AssemblyDoc)modDoc;
+                SelectionMgr selectionMgr = modDoc.SelectionManager;
+                IModelDoc2 partDoc;
+                Component2 component;
+                //asmDoc.getsel
+                int looptime = selectionMgr.GetSelectedObjectCount2(-1);
+                while (looptime >= 1)
+                {
+                    //todo：校核是否是零件类,现在是直接抛出    
+                    try
+                    {
+                        looptime--;
+                        component = selectionMgr.GetSelectedObject6(looptime+1, -1);
+                        partDoc = (IModelDoc2)component.GetModelDoc2();
+                        GetAndSetDrawingNo(partDoc);                                            
+                    }
+                    catch
+                    { }
+                }
+            }            
+        }
+
+        private static void GetAndSetDrawingNo(IModelDoc2 modDoc)
+        {
             string fileName;
             string pattern;
             string drawingNoEnd;
             string drawingNoPre;
-
             fileName = modDoc.GetTitle();
+
+            //去除后缀
+            fileName = fileName.Substring(0, fileName.LastIndexOf("."));
             //正则提取5位图号
-            pattern = "((a|A)?[0-9]{3,5})(a|A)?";
+            pattern = "((a|A)?[0-9]{3,5})(a|A)?$";
             drawingNoEnd = Regex.Match(fileName, pattern).Value;
-            //获取前缀
-            //todo：采用配置文件保存前缀
+            //从配置文件获取前缀
             drawingNoPre = ConfigurationManipulate.GetConfigValue("图号前缀");
             //将提取的5位图号写入自定义属性
-            if (modDoc.get_CustomInfo("图号") == "")
+            if (drawingNoEnd != "")
             {
                 modDoc.AddCustomInfo("图号", "文字", drawingNoPre + drawingNoEnd);
+                modDoc.set_CustomInfo("图号", drawingNoPre + drawingNoEnd);
             }
             else
             {
-                modDoc.set_CustomInfo("图号", drawingNoPre + drawingNoEnd);
+                modDoc.AddCustomInfo("图号", "文字", "外购件");
+                modDoc.set_CustomInfo("图号", "外购件");
             }
+            
         }
+
+
                 
         public void ConfigModify()
         {
@@ -501,7 +540,7 @@ namespace SwCSharpAddinByStanley
                     try
                     {
                         looptime--;
-                        component = selectionMgr.GetSelectedObject6(looptime, -1);
+                        component = selectionMgr.GetSelectedObject6(looptime+1, -1);
                         partDoc = (PartDoc)component.GetModelDoc2();                        
                         //todo：校核是否是零件类,现在是直接抛出
                         materialPropertyValues = partDoc.MaterialPropertyValues;
@@ -545,10 +584,10 @@ namespace SwCSharpAddinByStanley
             ModelDocExtension modDocExtension;
 
             partDoc = (PartDoc)modDoc;
-            featureCount = modDoc.GetFeatureCount();
+            featureCount = modDoc.GetFeatureCount();            
             while(featureCount>=0)
             {
-                featureCount--;
+                featureCount--;                
                 //feature = partDoc.;
             }
         }
@@ -611,11 +650,11 @@ namespace SwCSharpAddinByStanley
 
         public void FlyoutCallback()
         {
-            FlyoutGroup flyGroup = iCmdMgr.GetFlyoutGroup(flyoutGroupID);
+            /*FlyoutGroup flyGroup = iCmdMgr.GetFlyoutGroup(flyoutGroupID);
             flyGroup.RemoveAllCommandItems();
 
             flyGroup.AddCommandItem(System.DateTime.Now.ToLongTimeString(), "test", 0, "FlyoutCommandItem1", "FlyoutEnableCommandItem1");
-
+            */
         }
         public int FlyoutEnable()
         {
