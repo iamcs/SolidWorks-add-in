@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Reflection;
+using System.IO;
 
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swpublished;
@@ -41,6 +42,7 @@ namespace SwCSharpAddinByStanley
         public const int mainItemID5 = 4;
         public const int mainItemID6 = 5;
         public const int mainItemID7 = 6;
+        public const int mainItemID8 = 7;
         public const int flyoutGroupID = 91;
 
         #region Event Handler Variables
@@ -206,7 +208,7 @@ namespace SwCSharpAddinByStanley
             if (iBmp == null)
                 iBmp = new BitmapHandler();
             Assembly thisAssembly;
-            int cmdIndex0, cmdIndex1, cmdIndex2, cmdIndex3, cmdIndex4, cmdIndex5, cmdIndex6;
+            int cmdIndex0, cmdIndex1, cmdIndex2, cmdIndex3, cmdIndex4, cmdIndex5, cmdIndex6,cmdIndex7;
             string Title = "WATEASY", ToolTip = "fast and easy";
 
 
@@ -249,7 +251,8 @@ namespace SwCSharpAddinByStanley
             cmdIndex3 = cmdGroup.AddCommandItem2("随机颜色", -1, "随机颜色", "随机颜色", 3, "PartDye", "", mainItemID4, menuToolbarOption);
             cmdIndex4 = cmdGroup.AddCommandItem2("检查配孔", -1, "检查配孔", "检查配孔", 4, "HoleCheck", "", mainItemID5, menuToolbarOption);
             cmdIndex5 = cmdGroup.AddCommandItem2("外包尺寸", -1, "外包尺寸", "外包尺寸", 5, "GetBoundingBox", "", mainItemID6, menuToolbarOption);
-            cmdIndex6 = cmdGroup.AddCommandItem2("关于我", -1, "关于我", "关于我", 6, "AboutMe", "", mainItemID7, menuToolbarOption);
+            cmdIndex6 = cmdGroup.AddCommandItem2("关联打开", -1, "关联打开", "关联打开", 7, "OpenRelvantFile", "", mainItemID7, menuToolbarOption);
+            cmdIndex7 = cmdGroup.AddCommandItem2("关于我", -1, "关于我", "关于我", 6, "AboutMe", "", mainItemID8, menuToolbarOption);
 
             cmdGroup.HasToolbar = true;
             cmdGroup.HasMenu = true;
@@ -666,6 +669,82 @@ namespace SwCSharpAddinByStanley
                     "Z方向: " + (boundingBox[5] - boundingBox[2]).ToString("f2"));
             };
             
+        }
+
+        public void OpenRelvantFile()
+        {
+            IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
+            //获取当前打开文件类型：1-part，2-assembly, 3-drawing
+            int modleType = modDoc.GetType();
+            AssemblyDoc asmDoc;
+            PartDoc partDoc;
+            DrawingDoc drawingDoc;
+            string fileName;
+            string targetName;
+            string readyName;
+            string path;
+            string[] siblingNames;
+            int errors = 0;
+            int warnings = 0;
+
+            path = modDoc.GetPathName().Substring(0, modDoc.GetPathName().LastIndexOf("\\"));
+            fileName = modDoc.GetPathName().Substring(modDoc.GetPathName().LastIndexOf("\\") + 1, modDoc.GetPathName().LastIndexOf(".") - modDoc.GetPathName().LastIndexOf("\\") - 1);
+            siblingNames = Directory.GetFiles(path,"*.sld");
+
+            foreach (string x in siblingNames)
+            {
+                //获取不包括路径的文件名
+                readyName = x.ToLower().Replace("~$", "").Substring(x.LastIndexOf("\\") + 1, x.LastIndexOf(".") - x.LastIndexOf("\\") - 1);
+                if (x.Replace("~$", "") != modDoc.GetPathName() & (readyName.LastIndexOf(fileName.ToLower()) != -1 || fileName.LastIndexOf(readyName.ToLower()) != -1))
+                {
+                    targetName = x.Replace("~$","");
+                    iSwApp.OpenDoc6(targetName, 1, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
+                    iSwApp.OpenDoc6(targetName, 2, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
+                    iSwApp.OpenDoc6(targetName, 3, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
+                    iSwApp.ActivateDoc3(x.ToLower().Replace("~$", "").Substring(x.LastIndexOf("\\") + 1, x.Length - x.LastIndexOf("\\") - 1), false, (int)swRebuildOnActivation_e.swUserDecision, ref errors);                    
+                }
+            }
+            /*
+            switch (modleType)
+            {
+                case 1:                    
+                case 2:
+                    foreach (string x in siblingNames)
+                    {
+                        //获取不包括路径的文件名
+                        readyName = x.ToLower().Substring(x.LastIndexOf("\\") + 3, x.LastIndexOf(".") - x.LastIndexOf("\\") - 3); 
+                        //校核是否slddrw
+                        if (readyName.Substring(readyName.LastIndexOf(".") + 1, readyName.Length - readyName.LastIndexOf(".")-1) == "slddrw")
+                        {
+                            if (readyName.LastIndexOf(fileName.ToLower()) != -1)
+                            {
+                                targetName = readyName;
+                                iSwApp.OpenDoc6(targetName, 3,(int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    foreach (string x in siblingNames)
+                    {
+                        //获取不包括路径的文件名
+                        readyName = x.ToLower().Substring(x.LastIndexOf("\\") + 3, x.LastIndexOf(".") - x.LastIndexOf("\\") - 3);                        
+                        //校核是否sldprt
+                        if (readyName.Substring(readyName.LastIndexOf(".") + 1, readyName.Length - readyName.LastIndexOf(".")-1) == "sldprt")
+                        {
+                            if (fileName.LastIndexOf(readyName.ToLower()) != -1)
+                            {
+                                targetName = readyName;
+                                iSwApp.OpenDoc6(targetName, 2, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+            }*/
+            
+
         }
 
         public void AboutMe()
