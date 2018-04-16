@@ -316,6 +316,9 @@ namespace SwCSharpAddinByStanley
                     cmdIDs[6] = cmdGroup.get_CommandID(cmdIndex6);
 
                     TextType[6] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
+                    cmdIDs[7] = cmdGroup.get_CommandID(cmdIndex7);
+
+                    TextType[7] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextHorizontal;
                     
                     //cmdIDs[2] = cmdGroup.ToolbarId;
 
@@ -676,9 +679,6 @@ namespace SwCSharpAddinByStanley
             IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
             //获取当前打开文件类型：1-part，2-assembly, 3-drawing
             int modleType = modDoc.GetType();
-            AssemblyDoc asmDoc;
-            PartDoc partDoc;
-            DrawingDoc drawingDoc;
             string fileName;
             string targetName;
             string readyName;
@@ -703,48 +703,7 @@ namespace SwCSharpAddinByStanley
                     iSwApp.OpenDoc6(targetName, 3, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
                     iSwApp.ActivateDoc3(x.ToLower().Replace("~$", "").Substring(x.LastIndexOf("\\") + 1, x.Length - x.LastIndexOf("\\") - 1), false, (int)swRebuildOnActivation_e.swUserDecision, ref errors);                    
                 }
-            }
-            /*
-            switch (modleType)
-            {
-                case 1:                    
-                case 2:
-                    foreach (string x in siblingNames)
-                    {
-                        //获取不包括路径的文件名
-                        readyName = x.ToLower().Substring(x.LastIndexOf("\\") + 3, x.LastIndexOf(".") - x.LastIndexOf("\\") - 3); 
-                        //校核是否slddrw
-                        if (readyName.Substring(readyName.LastIndexOf(".") + 1, readyName.Length - readyName.LastIndexOf(".")-1) == "slddrw")
-                        {
-                            if (readyName.LastIndexOf(fileName.ToLower()) != -1)
-                            {
-                                targetName = readyName;
-                                iSwApp.OpenDoc6(targetName, 3,(int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    foreach (string x in siblingNames)
-                    {
-                        //获取不包括路径的文件名
-                        readyName = x.ToLower().Substring(x.LastIndexOf("\\") + 3, x.LastIndexOf(".") - x.LastIndexOf("\\") - 3);                        
-                        //校核是否sldprt
-                        if (readyName.Substring(readyName.LastIndexOf(".") + 1, readyName.Length - readyName.LastIndexOf(".")-1) == "sldprt")
-                        {
-                            if (fileName.LastIndexOf(readyName.ToLower()) != -1)
-                            {
-                                targetName = readyName;
-                                iSwApp.OpenDoc6(targetName, 2, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
-                                break;
-                            }
-                        }
-                    }
-                    break;
-            }*/
-            
-
+            }            
         }
 
         public void AboutMe()
