@@ -252,7 +252,7 @@ namespace SwCSharpAddinByStanley
             cmdIndex4 = cmdGroup.AddCommandItem2("检查配孔", -1, "检查配孔", "检查配孔", 4, "HoleCheck", "", mainItemID5, menuToolbarOption);
             cmdIndex5 = cmdGroup.AddCommandItem2("外包尺寸", -1, "外包尺寸", "外包尺寸", 5, "GetBoundingBox", "", mainItemID6, menuToolbarOption);
             cmdIndex6 = cmdGroup.AddCommandItem2("关联打开", -1, "关联打开", "关联打开", 7, "OpenRelvantFile", "", mainItemID7, menuToolbarOption);
-            cmdIndex7 = cmdGroup.AddCommandItem2("关于我", -1, "关于我", "关于我", 6, "AboutMe", "", mainItemID8, menuToolbarOption);
+            cmdIndex7 = cmdGroup.AddCommandItem2("关于我", -1, "关于我", "关于我", 6, "SaveAs", "", mainItemID8, menuToolbarOption);
 
             cmdGroup.HasToolbar = true;
             cmdGroup.HasMenu = true;
@@ -291,8 +291,8 @@ namespace SwCSharpAddinByStanley
 
                     CommandTabBox cmdBox = cmdTab.AddCommandTabBox();
 
-                    int[] cmdIDs = new int[7];
-                    int[] TextType = new int[7];
+                    int[] cmdIDs = new int[8];
+                    int[] TextType = new int[8];
 
                     cmdIDs[0] = cmdGroup.get_CommandID(cmdIndex0);
 
@@ -704,6 +704,54 @@ namespace SwCSharpAddinByStanley
                     iSwApp.ActivateDoc3(x.ToLower().Replace("~$", "").Substring(x.LastIndexOf("\\") + 1, x.Length - x.LastIndexOf("\\") - 1), false, (int)swRebuildOnActivation_e.swUserDecision, ref errors);                    
                 }
             }            
+        }
+
+        public void SaveAs()
+        {
+            IModelDoc2 modDoc = (IModelDoc2)iSwApp.ActiveDoc;
+            ModelDocExtension mDocExten;
+            IModelDoc2 swModel;
+            AssemblyDoc asmDoc = (AssemblyDoc)modDoc;
+            SelectionMgr selectionMgr = modDoc.SelectionManager;            
+            Component2 component;            
+            string path;
+            string recentPath;
+            int errors = 0;
+            int warnings = 0;
+
+            recentPath = iSwApp.GetRecentFiles()[0].Substring(0, modDoc.GetPathName().LastIndexOf("\\"));
+            //asmDoc.getsel
+            int looptime = selectionMgr.GetSelectedObjectCount2(-1);
+            while (looptime >= 1)
+            {
+                try
+                {
+                    looptime--;
+                    component = selectionMgr.GetSelectedObject6(looptime + 1, -1);
+                    swModel = (IModelDoc2)component.GetModelDoc2();
+                    mDocExten = swModel.Extension;
+                    //todo：校核是否是零件类,现在是直接抛出
+                    //另存为对话框
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Title = "另存为";
+                    sfd.InitialDirectory = recentPath;//更改为最近使用
+                    sfd.Filter = "零件| *.sldprt";
+                    sfd.ShowDialog();
+
+                    path = sfd.FileName;
+                    if (path == "")
+                    {
+                        return;
+                    }
+                    //另存为新零件
+                    mDocExten.SaveAs(path, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref errors, ref warnings);
+                    //替换现有零件
+                    asmDoc.ReplaceComponents(path,"",false,true);                    
+                }
+                catch
+                { }
+            }
+            
         }
 
         public void AboutMe()
