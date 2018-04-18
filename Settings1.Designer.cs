@@ -34,5 +34,17 @@ namespace SwCSharpAddinByStanley {
                 this["图号前缀"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool 随机颜色 {
+            get {
+                return ((bool)(this["随机颜色"]));
+            }
+            set {
+                this["随机颜色"] = value;
+            }
+        }
     }
 }

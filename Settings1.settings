@@ -5,5 +5,8 @@
     <Setting Name="图号前缀" Type="System.String" Scope="User">
       <Value Profile="(Default)">SWA2017-123456</Value>
     </Setting>
+    <Setting Name="随机颜色" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

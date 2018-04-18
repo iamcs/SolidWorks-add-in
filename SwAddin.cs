@@ -51,7 +51,7 @@ namespace SwCSharpAddinByStanley
         #endregion
 
         #region Property Manager Variables
-        UserPMPage ppage = null;
+        UserPMPage ppage = null;        
         #endregion
 
 
@@ -563,13 +563,25 @@ namespace SwCSharpAddinByStanley
         {
             Random random = new Random();
             float red, green, blue;
+            string dyeMode;
 
             red = ((float)random.Next(0, 256)) / 256;
             green = ((float)random.Next(0, 256)) / 256;
-            blue = ((float)random.Next(0, 256)) / 256;            
-            materialPropertyValues[0] = red;
-            materialPropertyValues[1] = green;
-            materialPropertyValues[2] = blue;
+            blue = ((float)random.Next(0, 256)) / 256;
+            dyeMode = ConfigurationManipulate.GetConfigValue("随机颜色");
+            if (dyeMode == "False")
+            {
+                materialPropertyValues[0] = red;
+                materialPropertyValues[1] = green;
+                materialPropertyValues[2] = blue;
+            }
+            else if (dyeMode == "True")
+            {
+                materialPropertyValues[0] = 1;
+                materialPropertyValues[1] = 1;
+                materialPropertyValues[2] = 1;
+            }
+            
 
             return materialPropertyValues;
         }
