@@ -595,6 +595,7 @@ namespace SwCSharpAddinByStanley
             dynamic materialPropertyValues;
             AssemblyDoc asmDoc;
             PartDoc partDoc;
+            Component2[] components;
             Component2 component;
             WizardHoleFeatureData2 holeFeatureData;
             Feature feature;
@@ -605,9 +606,8 @@ namespace SwCSharpAddinByStanley
             Body2 swBody = default(Body2);
             Face2[] arrface;
             Edge[] edges;
-
-
             
+            //todo,用几何方法来查找孔
             partDoc = (PartDoc)modDoc;
             feature = partDoc.FirstFeature();
             while(feature != null)
@@ -624,6 +624,15 @@ namespace SwCSharpAddinByStanley
                 };
                 feature= feature.GetNextFeature();
             }
+
+            //在装配体中查找贴合面
+                //获取所有面
+            asmDoc = (AssemblyDoc)modDoc;
+            components = (Component2[])asmDoc.GetComponents(true);
+            ComponentsTraverse(components);
+            //查找面上的孔
+            //查找对应的孔
+            //判断孔是否对
             /*WizardHoleFeatureData2 holes;
             modDoc.feature
             partDoc.FeatureById
@@ -648,6 +657,38 @@ namespace SwCSharpAddinByStanley
                 featureCount--;                
                 //feature = partDoc.;
             }*/
+        }
+
+        private static void ComponentsTraverse(Component2[] components)
+        {
+            foreach (Component2 x in components)
+            {
+                Component2[] tmp = x.GetChildren();
+                if (tmp != null)
+                {
+                    ComponentsTraverse(tmp);
+                }
+                else 
+                {                    
+                    object[] arrBody = null;
+                    Face2[] arrface;
+                    Edge[] edges;
+                    arrBody = (Body2[])((PartDoc)x).GetBodies2((int)swBodyType_e.swSolidBody, true);
+                    foreach (Body2 y in arrBody)
+                        {
+                            arrface = (Face2[])y.GetFaces();
+                            foreach (Face2 z in arrface)
+                            {                                
+                                z.get_INormal();
+                                //拿到了向量后，分配到对应的零件中去。
+                                //比对不同零件中，两个向量相同的面之间的距离是否为0，即贴合
+                                //将不同零件且贴合的面比较，看是否存在孔
+                                //若存在孔，且不存在同向量的其它配合孔和边线，或这些参数错误
+                                //则判断为错误配孔
+                            }
+                        }
+                }
+            }
         }
 
         public void GetBoundingBox()
@@ -732,7 +773,6 @@ namespace SwCSharpAddinByStanley
             int warnings = 0;
 
             recentPath = iSwApp.GetRecentFiles()[0].Substring(0, modDoc.GetPathName().LastIndexOf("\\"));
-            //asmDoc.getsel
             int looptime = selectionMgr.GetSelectedObjectCount2(-1);
             while (looptime >= 1)
             {
@@ -756,7 +796,7 @@ namespace SwCSharpAddinByStanley
                         return;
                     }
                     //另存为新零件
-                    mDocExten.SaveAs(path, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref errors, ref warnings);
+                    mDocExten.SaveAs(path, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Copy, null, ref errors, ref warnings);
                     //替换现有零件
                     asmDoc.ReplaceComponents(path,"",false,true);                    
                 }
