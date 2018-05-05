@@ -15,22 +15,14 @@ namespace SwCSharpAddinByStanley
         {
             InitializeComponent();
             this.textBox1.Text = ConfigurationManipulate.GetConfigValue("图号前缀");
-            if(ConfigurationManipulate.GetConfigValue("随机颜色") == "True")
-            {
-                this.checkBox1.Checked = true;
-            }
-            else
-            {
-                this.checkBox1.Checked = false;
-            }
-            
+            this.trackBar1.Value = Convert.ToInt16(ConfigurationManipulate.GetConfigValue("颜色增益"));            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             ConfigurationManipulate.SetConfigValue("图号前缀", this.textBox1.Text);
-            ConfigurationManipulate.SetConfigValue("随机颜色", this.checkBox1.Checked.ToString());
+            ConfigurationManipulate.SetConfigValue("颜色增益", this.trackBar1.Value.ToString());
             this.Close();
-        }
+        }        
     }
 }

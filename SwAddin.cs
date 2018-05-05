@@ -32,7 +32,7 @@ namespace SwCSharpAddinByStanley
         ISldWorks iSwApp = null;
         ICommandManager iCmdMgr = null;
         int addinID = 0;
-        BitmapHandler iBmp;
+        BitmapHandler iBmp;        
 
         public const int mainCmdGroupID = 5;
         public const int mainItemID1 = 0;
@@ -562,30 +562,36 @@ namespace SwCSharpAddinByStanley
         public dynamic RandomColorValues(dynamic materialPropertyValues)
         {
             Random random = new Random();
-            float red, green, blue;
-            string dyeMode;
+            float red = 0, green = 0, blue = 0;
+            int dyeMode;
 
+            dyeMode = Convert.ToInt16(ConfigurationManipulate.GetConfigValue("颜色增益"));
+            while (red < 0.4 & green < 0.4 & blue < 0.6)
+            {
             red = ((float)random.Next(0, 256)) / 256;
             green = ((float)random.Next(0, 256)) / 256;
             blue = ((float)random.Next(0, 256)) / 256;
-            dyeMode = ConfigurationManipulate.GetConfigValue("随机颜色");
-            if (dyeMode == "False")
-            {
-                materialPropertyValues[0] = red;
-                materialPropertyValues[1] = green;
-                materialPropertyValues[2] = blue;
             }
-            else if (dyeMode == "True")
+
+            
+            if (dyeMode > 127)
             {
-                materialPropertyValues[0] = 1;
-                materialPropertyValues[1] = 1;
-                materialPropertyValues[2] = 1;
+                red = (255-dyeMode) / 128 * (1 - red) + red;
+                green = (255 - dyeMode) / 128 * (1 - green) + green;
+                blue = (255 - dyeMode) / 128 * (1 - blue) + blue;
+            }
+            else if (dyeMode < 127)
+            {
+                red = red * dyeMode / 128;
+                green = green * dyeMode / 128;
+                blue = blue * dyeMode / 128;
             }
             
 
             return materialPropertyValues;
         }
 
+        public delegate void ComponentsTravrseFunction(Face2 faceTarget, Face2 faceCompare, IModelDoc2 modDoc);
         public void HoleCheck()
         {
             //MessageBox.Show("此功能计划中...");
@@ -605,31 +611,41 @@ namespace SwCSharpAddinByStanley
             object[] arrBody = null;
             Body2 swBody = default(Body2);
             Face2[] arrface;
+            Face2 face = default(Face2);
             Edge[] edges;
-            
-            //todo,用几何方法来查找孔
+
+            //查找所有异型孔            
             partDoc = (PartDoc)modDoc;
             feature = partDoc.FirstFeature();
-            while(feature != null)
+            try 
             {
-                if(feature.GetTypeName() == "HoleWzd")
+                while (feature != null)
                 {
-                    holeFeatureData = feature.GetDefinition();
-                    foreach(SketchPoint x in holeFeatureData.GetSketchPoints())
+                    if (feature.GetTypeName() == "HoleWzd")
                     {
-                        MessageBox.Show("发现孔坐标\nx: "+(x.X*1000).ToString()+"\n"+
-                                        "y: " + (x.Y * 1000).ToString() + "\n" +
-                                        "z: " + (x.Z * 1000).ToString() + "\n");
-                    }
-                };
-                feature= feature.GetNextFeature();
+                        holeFeatureData = feature.GetDefinition();
+                        foreach (Face2 x in feature.GetFaces())
+                        {
+                            x.Highlight(true);
+                        }
+
+                    };
+                    feature = feature.GetNextFeature();
+                }
             }
+            catch { }
+            
+            //查找异形孔贴合面
+            //对应的异型孔
+            //判断有无或正误
+            //todo,用几何方法来查找孔
 
             //在装配体中查找贴合面
                 //获取所有面
-            asmDoc = (AssemblyDoc)modDoc;
-            components = (Component2[])asmDoc.GetComponents(true);
-            ComponentsTraverse(components);
+            //asmDoc = (AssemblyDoc)modDoc;
+            //components = (Component2[])asmDoc.GetComponents(true);
+            //ComponentsTravrseFunction method = new ComponentsTravrseFunction(FaceCompare);
+            //ComponentsTraverse(components, modDoc, method, face);
             //查找面上的孔
             //查找对应的孔
             //判断孔是否对
@@ -658,15 +674,16 @@ namespace SwCSharpAddinByStanley
                 //feature = partDoc.;
             }*/
         }
-
-        private static void ComponentsTraverse(Component2[] components)
+        
+        //遍历所有零件
+        private static void ComponentsTraverse(Component2[] components, IModelDoc2 modDoc, ComponentsTravrseFunction method, Face2 faceTarget)
         {
             foreach (Component2 x in components)
             {
                 Component2[] tmp = x.GetChildren();
                 if (tmp != null)
                 {
-                    ComponentsTraverse(tmp);
+                    ComponentsTraverse(tmp, modDoc, method, faceTarget);
                 }
                 else 
                 {                    
@@ -678,9 +695,9 @@ namespace SwCSharpAddinByStanley
                         {
                             arrface = (Face2[])y.GetFaces();
                             foreach (Face2 z in arrface)
-                            {                                
-                                z.get_INormal();
-                                //拿到了向量后，分配到对应的零件中去。
+                            {
+                                method(faceTarget, z, modDoc);
+                                                               
                                 //比对不同零件中，两个向量相同的面之间的距离是否为0，即贴合
                                 //将不同零件且贴合的面比较，看是否存在孔
                                 //若存在孔，且不存在同向量的其它配合孔和边线，或这些参数错误
@@ -688,6 +705,50 @@ namespace SwCSharpAddinByStanley
                             }
                         }
                 }
+            }
+        }
+
+        private static void FaceCompare(Face2 faceTarget, Face2 faceCompare, IModelDoc2 modDoc)
+        {
+            //遍历每一个面，并将face与每一个面比较
+            AssemblyDoc asmDoc;
+            Component2[] components;
+
+            faceTarget = faceCompare;
+            asmDoc = (AssemblyDoc)modDoc;
+            components = (Component2[])asmDoc.GetComponents(true);
+            ComponentsTraverse(components, modDoc, Compare, faceTarget);
+        }
+
+        private static void Compare(Face2 faceTarget, Face2 faceCompare, IModelDoc2 modDoc)
+        {
+            //比较面
+            Measure measure;
+            SelectionMgr selMgr;
+            SelectData selData;
+            DispatchWrapper[] arrObjIn = new DispatchWrapper[2];
+            int ret;
+
+            measure = modDoc.Extension.CreateMeasure();
+            selMgr = modDoc.SelectionManager;
+            selData = (SelectData)selMgr.CreateSelectData();
+            arrObjIn[0] = new DispatchWrapper(faceTarget);
+            arrObjIn[1] = new DispatchWrapper(faceCompare);
+            ret = selMgr.SuspendSelectionList();
+
+            selMgr.AddSelectionListObjects((arrObjIn), selData);
+            //如果两面贴合,且不为同一面
+            if (measure.IsParallel & !faceTarget.IsSame(faceCompare) & measure.Distance <= 0.01)
+            { 
+                //查找所有圆形
+                //孔是否贯通
+                    //若否且孔到比较面的距离小于0.01则认为是漏打孔
+                        //
+                //查找所有圆柱面
+                    //查找圆柱面的接合面
+                        //接合面是否有贴合面
+                        //贴合面是否至少存在一个对应孔
+                
             }
         }
 
